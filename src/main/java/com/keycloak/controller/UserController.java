@@ -40,4 +40,26 @@ public class UserController {
                     .body("Failed to send verification email: " + e.getMessage());
         }
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Failed to delete user: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String username) {
+        try {
+            userService.forgotPassword(username);
+            return ResponseEntity.ok("Forgot password mail sent.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Failed to reset password: " + e.getMessage());
+        }
+    }
 }

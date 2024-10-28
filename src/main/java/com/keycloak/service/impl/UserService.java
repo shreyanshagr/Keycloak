@@ -89,6 +89,20 @@ public class UserService implements IUserService {
         }
     }
 
+    public void deleteUser(String userId) {
+        UsersResource usersResource = getUsersResources();
+       usersResource.delete(userId);
+    }
+
+    public void forgotPassword(String username) {
+        UsersResource usersResource = getUsersResources();
+        List<UserRepresentation> userRepresentations = usersResource.searchByUsername(username,true);
+        UserRepresentation userRepresentation1 = userRepresentations.getFirst();
+        UserResource userResource = usersResource.get(userRepresentation1.getId());
+        userResource.executeActionsEmail(List.of("UPDATE_PASSWORD"));
+
+    }
+
     private UsersResource getUsersResources(){
         return keycloak.realm(realm).users();
     }
